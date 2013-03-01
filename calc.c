@@ -6,12 +6,19 @@
 #include "calc.h"
 
 int main(int argc, char ** argv){
-    char * bin1, * bin2, * ret;
+    char * bin1, * bin2, * ret, op;
+
+    if(argc != 5){
+        fprintf(stderr, "ERROR wrong number of arguments");
+        exit(1);
+    }
+
+    operator = argv[1][0];
 
     bin1 = to_bin(argv[2]);
     bin2 = to_bin(argv[3]);
 
-    switch(argv[1][0]){
+    switch(operator){
         case '+':
             if(strlen(bin1) > strlen(bin2)){
                 ret = add(bin1, bin2);

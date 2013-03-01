@@ -6,27 +6,39 @@
 #include "util.h"
 
 char * to_bin(char * s){
-    int basei = 0;
+    int negative, i;
+    char base;
+    if(s[0] == '-') {
+        negative = 1;
+        base = s[1];
+    }
 
-    if(s[basei] == '-'){
+
+    if(negative){
 /*        handle negative values*/
     }
 
     else{
-        switch(s[0]){
+        switch(base){
             case 'b':
+            case 'B':
 /*                do nothing*/
                 break;
 
             case 'o':
+            case 'O':
 /*                do a thing*/
                 break;
 
             case 'd':
+            case 'D':
 /*                do more things*/
                 break;
 
             case 'x':
+            case 'X':
+            case 'h':
+            case 'H':
 /*                do things*/
                 break;
 
@@ -43,16 +55,27 @@ char * to_bin(char * s){
 char * from_bin(char * bin, char base){
 
     switch (base){
+        case 'b':
+        case 'B':
+            return bin;
         case 'o':
+        case 'O':
 /*            binary to octal conversion*/
             break;
 
         case 'h':
+        case 'H':
+        case 'x':
+        case 'X':
 /*            binary to hex conversion*/
             break;
 
         case 'd':
-/*            binary to decimal conversion*/
+        case 'D':
+/*          binary to decimal conversion*/
+            for(i = 0; i < strlen(s); i++){
+                if(s[i] == '1'){
+                        ret += pow(2, strlen(s)-i-1);
             break;
 
         default:

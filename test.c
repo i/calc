@@ -5,11 +5,20 @@
 #include "util.h"
 
 int main(int argc, char ** argv){
-    char * ret;
+    char * ret, * big, * small;
 
-    ret = add(argv[1],argv[2]);
+    if(strlen(argv[1]) > strlen(argv[2])) {
+        big = argv[1];
+        small = argv[2];
+     } else {
+         big = argv[2];
+         small = argv[1];
+     }
+
+    ret = add(big, small);
 
     printf("%s\n",ret);
+    free(ret);
 
     return 0;
 }
