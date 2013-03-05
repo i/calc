@@ -7,7 +7,7 @@
 
 char * to_bin(char * s){
     int negative, i;
-    char base;
+    char base, * ret;
     if(s[0] == '-') {
         negative = 1;
         base = s[1];
@@ -15,31 +15,35 @@ char * to_bin(char * s){
 
 
     if(negative){
-/*        handle negative values*/
+        /*        handle negative values*/
+        i = 1;
+        i++;
+        ret = "";
+        return ret;
     }
 
     else{
         switch(base){
             case 'b':
             case 'B':
-/*                do nothing*/
+                /*                do nothing*/
                 break;
 
             case 'o':
             case 'O':
-/*                do a thing*/
+                /*                do a thing*/
                 break;
 
             case 'd':
             case 'D':
-/*                do more things*/
+                /*                do more things*/
                 break;
 
             case 'x':
             case 'X':
             case 'h':
             case 'H':
-/*                do things*/
+                /*                do things*/
                 break;
 
             default:
@@ -53,29 +57,53 @@ char * to_bin(char * s){
 /*converts binary number to (o)octal, (h)hexadecimal,*/
 /*(d)decimal,*/
 char * from_bin(char * bin, char base){
+    int i;
+    long num = 0;
+    char digit, * ret;
 
     switch (base){
         case 'b':
         case 'B':
             return bin;
+
         case 'o':
         case 'O':
-/*            binary to octal conversion*/
+            /*            binary to octal conversion*/
             break;
 
         case 'h':
         case 'H':
         case 'x':
         case 'X':
-/*            binary to hex conversion*/
+            /*            binary to hex conversion*/
             break;
 
         case 'd':
-        case 'D':
-/*          binary to decimal conversion*/
-            for(i = 0; i < strlen(s); i++){
-                if(s[i] == '1'){
-                        ret += pow(2, strlen(s)-i-1);
+            for(i = 0; i < strlen(bin); i++){
+                if(bin[i] == '1'){
+                    printf("adding %f\n", pow(2, strlen(bin)-i-1));
+                    num += pow(2, strlen(bin)-i-1);
+                }
+                else if(bin[i] == '0'){continue;}
+                else{
+                    fprintf(stderr, "Backend error: tried to convert nonbinary number as binary");
+                    exit(1);
+                }
+            }
+
+            printf("num:%ld\n", num);
+            ret = malloc((int)log10(num)+2);
+            printf("should be:%d\n", (int)log10(num)+2);
+            printf("len:%d\n",(int)sizeof(ret));
+
+            do{
+                digit = (int) num % 10 + '0';
+                printf("%c\n", digit);
+                ret[i] = digit;
+                num /= 10;
+            }while(floor(num > 1));
+            printf("ret:%s\n", ret);
+
             break;
 
         default:
@@ -126,7 +154,7 @@ char * add(char * big, char * small){
             default:
                 fprintf(stderr, "ERROR something went wrong!\n");
                 exit(1);
-       }
+        }
     }
     if(carry)
         ret[0] = '1';

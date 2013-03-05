@@ -1,11 +1,11 @@
 FILES=util.c test.c
-CFLAGS=-ansi -pedantic -Wall -Werror
+CFLAGS=-lm -ansi -pedantic -Wall -Werror
 
 all:
-	gcc $(FILES) $(CFLAGS) -o test
+	gcc $(FILES) $(CFLAGS) -o calc
 
 debug:
-	gcc $(FILES) $(CFLAGS) -g -o test
+	gcc $(FILES) $(CFLAGS) -g -o calc
 
 clean:
 	rm test
