@@ -6,65 +6,65 @@
 #include "util.h"
 
 char * to_bin(char * s){
-    int negative, i;
+    int negative, num;
     char base, * ret;
     if(s[0] == '-') {
         negative = 1;
         base = s[1];
     }
+    else{base = s[0];}
 
 
     if(negative){
         /*        handle negative values*/
-        i = 1;
-        i++;
-        ret = "";
-        return ret;
     }
 
-    else{
-        switch(base){
-            case 'b':
-            case 'B':
-                /*                do nothing*/
-                break;
+    switch(base){
+        case 'b':
+        case 'B':
+            ret = malloc(sizeof(strpbrk(s, "10")));
+            strcpy(ret, strpbrk(s, "10"));
+            return ret;
+            break;
 
-            case 'o':
-            case 'O':
-                /*                do a thing*/
-                break;
+        case 'o':
+        case 'O':
+            /*                do a thing*/
+            break;
 
-            case 'd':
-            case 'D':
-                /*                do more things*/
-                break;
+        case 'd':
+        case 'D':
+            
 
-            case 'x':
-            case 'X':
-            case 'h':
-            case 'H':
-                /*                do things*/
-                break;
+            /*                do more things*/
+            break;
 
-            default:
-                fprintf(stderr, "ERROR Invalid operand\n");
-                exit(1);
-        }
+        case 'x':
+        case 'X':
+        case 'h':
+        case 'H':
+            /*                do things*/
+            break;
+
+        default:
+            fprintf(stderr, "ERROR Invalid operand\n");
+            exit(1);
     }
     return 0;
 }
 
-/*converts binary number to (o)octal, (h)hexadecimal,*/
-/*(d)decimal,*/
+/*converts binary number to (o)octal, (h)hexadecimal, (d)decimal*/
 char * from_bin(char * bin, char base){
-    int i;
+    int i, len;
     long num = 0;
     char digit, * ret;
 
     switch (base){
         case 'b':
         case 'B':
-            return bin;
+            ret = malloc(strlen(bin)+1);
+            strcpy(ret,strpbrk(bin, "1"));
+            return ret;
 
         case 'o':
         case 'O':
@@ -81,7 +81,6 @@ char * from_bin(char * bin, char base){
         case 'd':
             for(i = 0; i < strlen(bin); i++){
                 if(bin[i] == '1'){
-                    printf("adding %f\n", pow(2, strlen(bin)-i-1));
                     num += pow(2, strlen(bin)-i-1);
                 }
                 else if(bin[i] == '0'){continue;}
@@ -91,19 +90,17 @@ char * from_bin(char * bin, char base){
                 }
             }
 
-            printf("num:%ld\n", num);
-            ret = malloc((int)log10(num)+2);
-            printf("should be:%d\n", (int)log10(num)+2);
-            printf("len:%d\n",(int)sizeof(ret));
+            len = (int)log10(num)+1;
+            ret = malloc(len);
 
-            do{
+            for(i = 0; i < len; i++){
                 digit = (int) num % 10 + '0';
-                printf("%c\n", digit);
                 ret[i] = digit;
                 num /= 10;
-            }while(floor(num > 1));
-            printf("ret:%s\n", ret);
+            }
 
+            strrev(ret);
+            return ret;
             break;
 
         default:
@@ -156,8 +153,10 @@ char * add(char * big, char * small){
                 exit(1);
         }
     }
-    if(carry)
+
+    if(carry){
         ret[0] = '1';
+    }
 
     free(s);
     return ret;
@@ -192,4 +191,16 @@ char * shorter(char * s1, char * s2){
     if(strlen(s1) <= strlen(s2))
         return s1;
     return s2;
+}
+
+void strrev(char * s){
+    char * e, t;
+    e = s + strlen(s) - 1;
+    while(s < e){
+        t = *s;
+        *s = *e;
+        *e = t;
+        e--; s++;
+        return;
+    }
 }

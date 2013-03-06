@@ -1,4 +1,4 @@
-FILES=util.c test.c
+FILES=util.c calc.c
 CFLAGS=-lm -ansi -pedantic -Wall -Werror
 
 all:
@@ -8,4 +8,4 @@ debug:
 	gcc $(FILES) $(CFLAGS) -g -o calc
 
 clean:
-	rm test
+	rm calc
