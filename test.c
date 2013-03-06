@@ -1,24 +1,16 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <math.h>
 
 #include "util.h"
 
 int main(int argc, char ** argv){
-    char * ret, * big, * small;
+    char * num1,  * sum;
 
-    if(strlen(argv[1]) > strlen(argv[2])) {
-        big = argv[1];
-        small = argv[2];
-     } else {
-         big = argv[2];
-         small = argv[1];
-     }
+    num1 = argv[1];
+    num2 = argv[1];
+    sum = from_bin(num1, 'd');
 
-    ret = add(big, small);
 
-    printf("%s\n",ret);
-    free(ret);
-
+    printf("%s\n", sum);
     return 0;
 }

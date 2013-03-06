@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "util.h"
-#include "calc.h"
 
 /*input should be ./calc <op> <num1> <num2> <output base>*/
 int main(int argc, char ** argv){
