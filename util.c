@@ -6,17 +6,17 @@
 #include "util.h"
 
 char * to_bin(char * s){
-    int negative, num;
-    char base, * ret;
+    int negative, num, i;
+    char base, * ret, * bits;
+
     if(s[0] == '-') {
         negative = 1;
         base = s[1];
     }
-    else{base = s[0];}
-
+    else{ base = s[0]; }
 
     if(negative){
-        /*        handle negative values*/
+        negative = 1;    /*        handle negative values*/
     }
 
     switch(base){
@@ -34,7 +34,15 @@ char * to_bin(char * s){
 
         case 'd':
         case 'D':
-            
+            ret = malloc(1000);
+            ret = "0";
+            for(i=0; i < strlen(s); i++){
+                bits = decbits(s[strlen(s)-i-1]);
+                printf("%s\n",bits);
+                strcat(ret, bits);
+                free(bits);
+            }
+
 
             /*                do more things*/
             break;
@@ -57,7 +65,7 @@ char * to_bin(char * s){
 char * from_bin(char * bin, char base){
     int i, len;
     long num = 0;
-    char digit, * ret;
+    char digit, * ret, nibble[4];
 
     switch (base){
         case 'b':
@@ -75,7 +83,12 @@ char * from_bin(char * bin, char base){
         case 'H':
         case 'x':
         case 'X':
-            /*            binary to hex conversion*/
+            for(i = 0; i < strlen(bin); i++){
+                /*                grab four bytes*/
+
+
+
+            }
             break;
 
         case 'd':
@@ -111,11 +124,17 @@ char * from_bin(char * bin, char base){
 }
 
 
-/*binary addition.*/
-/*works only when big >= small*/
-char * add(char * big, char * small){
-    char * ret, * s;
+char * add(char * num1, char * num2){
+    char * ret, * s, * big, * small;
     int i, carry;
+
+    if(strlen(num1) > strlen(num2)){
+        big = num1;
+        small = num2;
+    } else {
+        big = num2;
+        small = num1;
+    }
 
     s = malloc(strlen(big));
     for(i = 0; i < strlen(big)-strlen(small); i++) {strcat(s,"0");}
@@ -153,18 +172,41 @@ char * add(char * big, char * small){
                 exit(1);
         }
     }
-
     if(carry){
         ret[0] = '1';
     }
-
     free(s);
     return ret;
 }
 
-int addDigit(char d1, char d2, int carry){
-    return (d1 - '0') + (d2 - '0') + carry ;
+/*subtracts bin2 from bin1*/
+char * subtract(char * minuend, char * subtrahend){
+    char * diff, * temp;
+
+    printf("adding: %s to %s\n",minuend, twos_comp(subtrahend));
+    temp = add(minuend, twos_comp(subtrahend));
+    /*    diff = malloc(strlen(strpbrk(++temp, "01")) + 1);*/
+    /*    strcpy(diff, strpbrk(++temp, "10"));*/
+    diff = malloc(strlen(temp) + 1);
+    strcpy(diff, temp);
+    if(diff[0] == '\0'){
+        diff = "0";
+    }
+
+    return diff;
 }
+
+/*char * multiply(char * multiplicitand1, char * multiplix0r){*/
+    /*    char * sum;*/
+    /*    int i, multiplizagsxfr;*/
+    /*    multiplizagsxfr = 0;*/
+/*}*/
+
+
+int addDigit(char d1, char d2, int carry){
+    return (d1 - '0') + (d2 - '0') + carry;
+}
+
 
 char * cat(char * s1, char * s2){
     char * ret;
@@ -173,6 +215,7 @@ char * cat(char * s1, char * s2){
     strcat(ret,s2);
     return ret;
 }
+
 
 int max(int num1,int num2){
     if(num1 >= num2)
@@ -203,4 +246,130 @@ void strrev(char * s){
         e--; s++;
         return;
     }
+}
+
+void flip_bits(char * bits){
+    while (*bits != '\0'){
+        if(*bits == '0') {*bits = '1';}
+        else if(*bits == '1') {*bits = '0';}
+        else{
+            fprintf(stderr, "ERROR");
+            exit(1);
+        }
+        bits++;
+    }
+}
+
+char * twos_comp(char * bits){
+    char * ret;
+    flip_bits(bits);
+    ret = add(bits, "1");
+    return ret;
+}
+
+char nib_to_hex(char * nib){
+    char * bits;
+    int i;
+
+    bits = calloc(sizeof(char), 5);
+    for(i=0; i<4-strlen(nib); i++) strcat(bits,"0");
+
+    strcat(bits, nib);
+    printf("%s\n",bits);
+
+    if( strcmp(bits, "0000") == 0) return '0';
+    if( strcmp(bits, "0001") == 0) return '1';
+    if( strcmp(bits, "0010") == 0) return '2';
+    if( strcmp(bits, "0011") == 0) return '3';
+    if( strcmp(bits, "0100") == 0) return '4';
+    if( strcmp(bits, "0101") == 0) return '5';
+    if( strcmp(bits, "0110") == 0) return '6';
+    if( strcmp(bits, "0111") == 0) return '7';
+    if( strcmp(bits, "1000") == 0) return '8';
+    if( strcmp(bits, "1001") == 0) return '9';
+    if( strcmp(bits, "1010") == 0) return 'A';
+    if( strcmp(bits, "1011") == 0) return 'B';
+    if( strcmp(bits, "1100") == 0) return 'C';
+    if( strcmp(bits, "1101") == 0) return 'D';
+    if( strcmp(bits, "1110") == 0) return 'E';
+    if( strcmp(bits, "1111") == 0) return 'F';
+
+    fprintf(stderr, "ERROR Invalid nibble!");
+    exit(1);
+}
+
+char * hex_to_nib(char hex){
+    if(hex == '0') return "0000";
+    if(hex == '1') return "0001";
+    if(hex == '2') return "0010";
+    if(hex == '3') return "0011";
+    if(hex == '4') return "0100";
+    if(hex == '5') return "0101";
+    if(hex == '6') return "0110";
+    if(hex == '7') return "0111";
+    if(hex == '8') return "1000";
+    if(hex == '9') return "1001";
+    if(hex == 'A') return "1010";
+    if(hex == 'B') return "1011";
+    if(hex == 'C') return "1100";
+    if(hex == 'D') return "1101";
+    if(hex == 'E') return "1110";
+    if(hex == 'F') return "1111";
+
+    fprintf(stderr, "ERROR Invalid hex digit");
+    exit(1);
+}
+
+char * substr(char * str, int start, int stop){
+    char * ret, * t;
+
+    if(stop <= start || start < 0 || stop > strlen(str)){
+        fprintf(stderr, "ERROR out of range");
+        exit(1);
+    }
+
+    ret = calloc(sizeof(char), stop - start + 1);
+    t = str;
+    while(t != '\0'){
+        printf("%s", ret);
+    }
+    return ret;
+}
+
+char * decbits(char a){
+    char * dst;
+    dst = malloc(5);
+    switch(a){
+        case '0':
+            dst = "0";
+            break;
+        case '1':
+            dst = "1";
+            break;
+        case '2':
+            dst = "10";
+            break;
+        case '3':
+            dst = "11";
+            break;
+        case '4':
+            dst = "100";
+            break;
+        case '5':
+            dst = "101";
+            break;
+        case '6':
+            dst = "110";
+            break;
+        case '7':
+            dst = "111";
+            break;
+        case '8':
+            dst = "1000";
+            break;
+        case '9':
+            dst = "1001";
+            break;
+    }
+    return dst;
 }

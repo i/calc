@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "util.h"
-#include "calc.h"
 
 /*input should be ./calc <op> <num1> <num2> <output base>*/
 int main(int argc, char ** argv){
@@ -22,16 +21,11 @@ int main(int argc, char ** argv){
 
     switch(op){
         case '+':
-            if(strlen(bin1) > strlen(bin2)){
-                binanswer = add(bin1, bin2);
-            } else {
-                binanswer = add(bin2, bin1);
-            }
+            binanswer = add(bin1, bin2);
             break;
 
         case '-':
-
-/*            //things*/
+            binanswer = subtract(bin1, bin2);
             break;
 
         case '*':
