@@ -1,4 +1,4 @@
-FILES=util.c calc.c
+FILES=utils.c calc2.c
 CFLAGS=-lm -ansi -pedantic -Wall -Werror
 
 all:
