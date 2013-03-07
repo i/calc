@@ -1,5 +1,5 @@
 FILES=util.c calc.c
-CFLAGS=-lm -ansi -pedantic -Wall -Werror
+CFLAGS=-lm -ansi -pedantic -Wall
 
 all:
 	gcc $(FILES) $(CFLAGS) -o calc
